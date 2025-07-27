@@ -31,11 +31,7 @@ This script solves these problems by allowing you to **pre-configure the backup 
    - Select "Rescan"
    - Veeam will rediscover the backup and import the modified VBM settings
 
-5. **Verify the new settings** are recognized
-   - Check the backup properties to confirm CPU and RAM specifications
-   - The modified values should now be visible in Veeam's interface
-
-6. **Proceed with restore** to your Proxmox environment
+5. **Proceed with restore** to your Proxmox environment
    - The restore process will now use the updated hardware specifications
    - No resource allocation conflicts should occur
 
