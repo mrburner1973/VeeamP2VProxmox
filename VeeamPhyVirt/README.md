@@ -2,6 +2,14 @@
 
 This PowerShell script allows you to modify the CPU core count and/or RAM size in Veeam backup metadata (.vbm) files. It automatically updates both the configuration values and corresponding entries throughout the file.
 
+## Background & Motivation
+
+This script was created to address a limitation in Veeam Backup & Replication: **the lack of options to modify target CPU and RAM settings when restoring backups to different hardware configurations**.
+
+When restoring VM or physical machine backups to a Proxmox host that has fewer CPU cores or less RAM than the original source system, Veeam doesn't provide built-in functionality to adjust these hardware specifications during the restore process. This leads to aborting the restore process.
+
+This script solves these problems by allowing you to **pre-configure the backup metadata** with appropriate CPU and RAM settings that match your target Proxmox environment before initiating the restore process.
+
 ## Files
 
 - **Update-VeeamSystemConfig.ps1** - Main script for updating CPU cores and/or RAM
@@ -114,10 +122,17 @@ Backup saved as: C:\Path\To\Kerserv -.vbm.old1.backup_20250727_143022
 
 ## Common Use Cases
 
+### Primary Use Case: Proxmox Restore Optimization
+- **Downscaling for Proxmox**: Restore high-spec VM/physical backups to Proxmox hosts with limited resources
+- **Pre-restore Configuration**: Modify backup metadata before restore to prevent resource allocation conflicts
+- **Cross-platform Migration**: Adapt Windows/Linux backups from powerful servers to smaller Proxmox environments
+
+### General Use Cases
 1. **Reducing cores for smaller VMs**: Lower the core count when restoring to a system with fewer CPUs
-2. **Increasing cores for performance**: Add more cores when restoring to a more powerful system
-3. **Hardware compatibility**: Adjust core count to match target hardware specifications
-4. **Standardization**: Ensure consistent CPU core counts across restored VMs
+2. **Reducing RAM allocation**: Decrease memory allocation to fit target system constraints
+3. **Increasing cores for performance**: Add more cores when restoring to a more powerful system  
+4. **Hardware compatibility**: Adjust specifications to match target hardware capabilities
+5. **Standardization**: Ensure consistent resource allocation across restored VMs
 
 ## Troubleshooting
 
