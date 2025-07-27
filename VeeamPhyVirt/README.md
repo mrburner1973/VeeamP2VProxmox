@@ -1,22 +1,24 @@
-# Veeam VBM CPU Core Updater
+# Veeam VBM System Configuration Updater
 
-This PowerShell script allows you to modify the CPU core count in Veeam backup metadata (.vbm) files. It automatically updates both the `CoresCount` attribute and the corresponding number of `Core` entries.
+This PowerShell script allows you to modify the CPU core count and/or RAM size in Veeam backup metadata (.vbm) files. It automatically updates both the configuration values and corresponding entries throughout the file.
 
 ## Files
 
-- **Update-VeeamCPUCores.ps1** - Main script for updating CPU cores
+- **Update-VeeamSystemConfig.ps1** - Main script for updating CPU cores and/or RAM
 - **Example-Usage.ps1** - Interactive example script
 - **README.md** - This documentation file
 
 ## Features
 
 - ✅ Updates CPU core count in VBM files
+- ✅ Updates RAM size in VBM files  
 - ✅ Automatically adjusts the number of core entries
 - ✅ Preserves original core frequency values
 - ✅ Creates automatic backups before modification
 - ✅ Validates changes after completion
 - ✅ Error handling with backup restoration
 - ✅ Supports core counts from 1 to 128
+- ✅ Supports RAM sizes from 128 MB to 1 TB
 
 ## Requirements
 
@@ -29,11 +31,14 @@ This PowerShell script allows you to modify the CPU core count in Veeam backup m
 ### Basic Usage
 
 ```powershell
-# Update to 16 cores (preserves original frequency)
-.\Update-VeeamCPUCores.ps1 -FilePath "path\to\file.vbm" -NewCoreCount 16
+# Update CPU cores only (preserves original frequency)
+.\Update-VeeamSystemConfig.ps1 -FilePath "path\to\file.vbm" -NewCoreCount 16
 
-# Update to 8 cores (preserves original frequency)
-.\Update-VeeamCPUCores.ps1 -FilePath "path\to\file.vbm" -NewCoreCount 8
+# Update RAM only
+.\Update-VeeamSystemConfig.ps1 -FilePath "path\to\file.vbm" -NewRamSizeMB 32768
+
+# Update both CPU and RAM
+.\Update-VeeamSystemConfig.ps1 -FilePath "path\to\file.vbm" -NewCoreCount 8 -NewRamSizeMB 16384
 ```
 
 ### Interactive Mode
@@ -49,14 +54,18 @@ Run the example script for guided usage:
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | FilePath | String | Yes | Path to the VBM file to modify |
-| NewCoreCount | Integer | Yes | New number of CPU cores (1-128) |
+| NewCoreCount | Integer | No* | New number of CPU cores (1-128) |
+| NewRamSizeMB | Integer | No* | New RAM size in MB (128-1,048,576) |
+
+*At least one of NewCoreCount or NewRamSizeMB must be specified.
 
 ## File Structure
 
 The script looks for and modifies this XML structure in the VBM file:
 
-**Before (32 cores):**
+**Before (32 cores, 64GB RAM):**
 ```xml
+<RAMInfo TotalSizeMB="65536" />
 <CPUInfo CoresCount="32">
   <Core FrequencyMHz="2800" />
   <Core FrequencyMHz="2800" />
@@ -64,8 +73,9 @@ The script looks for and modifies this XML structure in the VBM file:
 </CPUInfo>
 ```
 
-**After (16 cores, frequency preserved):**
+**After (16 cores, 32GB RAM, frequency preserved):**
 ```xml
+<RAMInfo TotalSizeMB="32768" />
 <CPUInfo CoresCount="16">
   <Core FrequencyMHz="2800" />
   <Core FrequencyMHz="2800" />
