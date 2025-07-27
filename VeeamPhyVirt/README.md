@@ -10,6 +10,37 @@ When restoring VM or physical machine backups to a Proxmox host that has fewer C
 
 This script solves these problems by allowing you to **pre-configure the backup metadata** with appropriate CPU and RAM settings that match your target Proxmox environment before initiating the restore process.
 
+## Workflow with Veeam Backup & Replication
+
+**Important**: After modifying the VBM file, you must follow these steps for Veeam to recognize the new settings:
+
+1. **Rename the backup folder** to temporarily hide it from Veeam
+   - Navigate to your backup repository location
+   - Rename the backup folder (e.g., `backup_vm` → `backup_vm.old`)
+
+2. **Remove the backup from Veeam** with "Delete from disk"
+   - In Veeam Backup & Replication console, right-click the backup
+   - Select "Delete from disk"
+   - Veeam will only remove the database entries since it cannot find the original backup files
+
+3. **Restore the original backup folder name**
+   - Rename the folder back to its original name (e.g., `backup_vm.old` → `backup_vm`)
+
+4. **Rescan the backup repository**
+   - In Veeam console, right-click your backup repository
+   - Select "Rescan"
+   - Veeam will rediscover the backup and import the modified VBM settings
+
+5. **Verify the new settings** are recognized
+   - Check the backup properties to confirm CPU and RAM specifications
+   - The modified values should now be visible in Veeam's interface
+
+6. **Proceed with restore** to your Proxmox environment
+   - The restore process will now use the updated hardware specifications
+   - No resource allocation conflicts should occur
+
+⚠️ **Critical Note**: This folder rename technique ensures Veeam properly re-imports the backup with the updated metadata. Simply modifying the VBM file without this process will NOT update Veeam's internal configuration.
+
 ## Files
 
 - **Update-VeeamSystemConfig.ps1** - Main script for updating CPU cores and/or RAM
@@ -154,4 +185,4 @@ This script is provided as-is for educational and administrative purposes. Test 
 
 ## Author
 
-Created for Veeam VBM file management - July 2025
+Marc Peters
