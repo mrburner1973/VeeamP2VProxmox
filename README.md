@@ -131,9 +131,9 @@ Note: The actual format in the VBM file uses HTML entities (`&lt;`, `&gt;`, `&qu
 
 ```
 Starting CPU core update process...
-File: C:\Path\To\Kerserv -.vbm.old1
+File: C:\Path\To\Test-Vm.vbm
 New Core Count: 16
-Backup created: C:\Path\To\Kerserv -.vbm.old1.backup_20250727_143022
+Backup created: C:\Path\To\Test-Vm.vbm.backup_20250727_143022
 Current Core Count: 32
 Original Core Frequency: 2800 MHz
 Updating CPUInfo section...
@@ -144,7 +144,7 @@ Core entries found: 16
 SUCCESS: All core entries match the specified count!
 
 Update completed successfully!
-Backup saved as: C:\Path\To\Kerserv -.vbm.old1.backup_20250727_143022
+Backup saved as: C:\Path\To\Test-Vm.vbm.backup_20250727_143022
 ```
 
 ## Common Use Cases
